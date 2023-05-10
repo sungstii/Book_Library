@@ -34,7 +34,7 @@ public class MemberService {
         // 대여 조건1 : 대여 중인책이 5권 이하
         // 대여 조건2 : 연체되어서 패널티 안받고 있는지 ( 이거는 LoanService 에서 구현 )
         if(isOverQuantity(member)) {
-            throw new BusinessLogicException(ExceptionCode.LOAN_NOT_ALLOW);
+            throw new BusinessLogicException(ExceptionCode.EXCEEDS_MAXIMUM_QUANTITY);
         }
     }
 
@@ -43,6 +43,12 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_HAS_PENALTY);
         }
     }
+
+    public void validLoanStatus(Member member) {
+        validLoanOverDue(member);
+        validLoanQuantity(member);
+    }
+
     public boolean isOverQuantity(Member member) {
         List<Loan> loanBooks = member.getLoanBooks();
         long loanNum = 0;

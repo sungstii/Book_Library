@@ -38,12 +38,15 @@ public class LoanController {
 
         LibraryInventory libraryInventory = libraryInventoryService.findById(post.getLibraryInventoryId());
         //Todo: 도서관에 등록된 책이 대여가능 상태인지 확인 코드 필요 (재고수량 확인)
+        libraryInventoryService.validLoanStatus(libraryInventory);
+
         Loan loan = loanMapper.loanPostToLoan(post);
         loan.setLoanedAt(LocalDateTime.now()); //대여한시간
         loan.setMember(member);
         loan.setLibraryInventory(libraryInventory);
         //Todo: 대여후 도서관에 등록된 책 재고수량 수정
         libraryInventoryService.setLoanQuantity(libraryInventory);
+
         Loan loanBook = loanService.loanBook(loan);
         LoanDto.Response response = loanMapper.loanToLoanResponse(loanBook);
         //Todo: 이 요청에서 예외,오류 발생시 롤백 필요
