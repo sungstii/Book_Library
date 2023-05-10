@@ -13,3 +13,5 @@ spring:
     properties:
       hibernate:
         format_sql: true
+max_loan_day: 14
+max_loan_quantity: 5
