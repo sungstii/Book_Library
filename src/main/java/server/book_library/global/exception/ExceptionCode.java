@@ -7,7 +7,7 @@ public enum ExceptionCode {
     BOOK_NOT_FOUND(404, "책을 찾을 수 없습니다."),
     LIBRARY_NOT_FOUND(404, "도서관을 찾을 수 없습니다."),
     LIBRARY_INVENTORY_OUT_OF_STOCK(404,"도서 재고가 없습니다."),
-    LOAN_NOT_FOUND(404, "대여를 할 수 없습니다");
+    LOAN_NOT_ALLOW(404, "대여를 할 수 없습니다");
 
     @Getter
     private final int status;
