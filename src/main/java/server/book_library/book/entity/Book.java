@@ -7,8 +7,7 @@ import server.book_library.util.BaseEntity;
 import javax.persistence.Entity;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 public class Book extends BaseEntity {
     private String name;
     private String writer;

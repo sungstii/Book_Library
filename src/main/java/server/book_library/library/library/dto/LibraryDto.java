@@ -10,6 +10,7 @@ public class LibraryDto {
         private long id;
         private String name;
         private String img_url;
+        private String location;
 
     }
     @Getter
