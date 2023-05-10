@@ -1,0 +1,18 @@
+package server.book_library.member.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+import server.book_library.util.BaseEntity;
+
+import javax.persistence.Entity;
+
+@Entity
+@Getter
+@Setter
+public class Member extends BaseEntity {
+    private String name;
+    private String email;
+    private String password;
+    private String phone;
+
+}
