@@ -18,6 +18,10 @@ public class LibraryInventoryService {
         return libraryInventoryRepository.save(libraryInventory);
     }
 
+    public void setLoanQuantity(LibraryInventory libraryInventory){
+        libraryInventory.setLoanQuantity(libraryInventory.getLoanQuantity() + 1);
+    }
+
     public LibraryInventory findById(long id) {
         Optional<LibraryInventory> optionalLibraryInventory = libraryInventoryRepository.findById(id);
         return optionalLibraryInventory.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_OUT_OF_STOCK));
