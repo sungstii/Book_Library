@@ -26,7 +26,6 @@ public class LoanService {
     }
 
     public Loan returnBook(Loan loan) {
-        loan.setReturnedAt(LocalDateTime.now());
         loan.setLoanStats(Loan.LoanStats.반납완료);
         return loanRepository.save(loan);
     }
@@ -37,6 +36,12 @@ public class LoanService {
         return optionalLoan.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LOAN_NOT_FOUND));
     }
 
+    public void validReturn(Loan loan) {
+        if(loan.getLoanStats().equals(Loan.LoanStats.반납완료)) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_RETURNED_BOOKS);
+        }
+    }
+
     public boolean checkLateReturn(Loan loan) {
         //Todo: 빌린날짜,반납한날짜 비교해서 패널티 확인 메서드
         //Todo: 날짜 계산 메서드  값 패널티 끝나는 날짜 메서드
@@ -44,20 +49,22 @@ public class LoanService {
         LocalDateTime returnedAt = loan.getReturnedAt();
         LocalDateTime loanedAt = loan.getLoanedAt();
         long daysBetween = ChronoUnit.DAYS.between(returnedAt, loanedAt);
-        if(isOverDue(daysBetween)) {
-            setMemberPenalty(loan, daysBetween);
-            return true;
-        } else return false;
 
-    }
-
-    private boolean isOverDue(long daysBetween) {
         return daysBetween > maxLoanDay;
     }
 
-    private void setMemberPenalty(Loan loan, long daysBetween) {
+    public void setMemberPenalty(Loan loan) {
         Member member = loan.getMember();
+        LocalDateTime returnedAt = loan.getReturnedAt();
+        LocalDateTime loanedAt = loan.getLoanedAt();
+        long daysBetween = ChronoUnit.DAYS.between(returnedAt, loanedAt);
         member.setOverDue(true);
-        member.setPenaltyDeadLine(LocalDateTime.now().plusDays(daysBetween -maxLoanDay));
+        member.setPenaltyDeadLine(LocalDateTime.now().plusDays(daysBetween - maxLoanDay));
+    }
+
+    public void validMemberMatch(Loan loan, long memberId) {
+        if(loan.getMember().getId() !=  memberId) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+        }
     }
 }

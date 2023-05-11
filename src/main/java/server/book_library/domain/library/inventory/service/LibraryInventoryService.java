@@ -18,14 +18,22 @@ public class LibraryInventoryService {
         return libraryInventoryRepository.save(libraryInventory);
     }
 
-    public void setLoanQuantity(LibraryInventory libraryInventory){
+    public void plusLoanQuantity(LibraryInventory libraryInventory){
         libraryInventory.setLoanQuantity(libraryInventory.getLoanQuantity() + 1);
+        setLoanStatus(libraryInventory);
+    }
+
+    public void minusLoanQuantity(LibraryInventory libraryInventory) {
+        libraryInventory.setLoanQuantity(libraryInventory.getLoanQuantity() - 1);
         setLoanStatus(libraryInventory);
     }
 
     public static void setLoanStatus(LibraryInventory libraryInventory) {
         if(libraryInventory.getLoanQuantity() == libraryInventory.getTotalQuantity()) {
             libraryInventory.setLoanStatus(LibraryInventory.LoanStatus.모두대여중);
+        }
+        else if (libraryInventory.getLoanQuantity() < libraryInventory.getTotalQuantity()) {
+            libraryInventory.setLoanStatus(LibraryInventory.LoanStatus.대여가능);
         }
     }
 
