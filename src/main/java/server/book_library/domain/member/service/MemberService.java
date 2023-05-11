@@ -61,4 +61,15 @@ public class MemberService {
         }
         return loanNum >= maxLoanQuantity;
     }
+
+    public void validMemberStatus(Member member) {
+        if(member.getMemberStatus().equals(Member.MemberStatus.DELETE)) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_DELETED);
+        }
+    }
+
+    public Member deletedMember(Member member) {
+        member.setMemberStatus(Member.MemberStatus.DELETE);
+        return memberRepository.save(member);
+    }
 }

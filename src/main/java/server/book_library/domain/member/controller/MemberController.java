@@ -3,10 +3,7 @@ package server.book_library.domain.member.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.book_library.domain.member.dto.MemberDto;
 import server.book_library.domain.member.entity.Member;
 import server.book_library.domain.member.mapper.MemberMapper;
@@ -27,5 +24,14 @@ public class MemberController {
         MemberDto.Response response = memberMapper.memberToMemberResponse(createdMember);
 
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("{member-id}")
+    public ResponseEntity<?> deleteMember(@PathVariable("member-id") long memberId) {
+        Member member = memberService.findById(memberId);
+        Member memberDelete = memberService.deletedMember(member);
+        MemberDto.Response response = memberMapper.memberToMemberResponse(memberDelete);
+
+        return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package server.book_library.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import server.book_library.domain.member.entity.Member;
 
 public class MemberDto {
     @Getter
@@ -20,5 +21,6 @@ public class MemberDto {
         private String name;
         private String email;
         private String phone;
+        private Member.MemberStatus memberStatus;
     }
 }

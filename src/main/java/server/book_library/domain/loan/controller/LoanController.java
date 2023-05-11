@@ -30,12 +30,12 @@ public class LoanController {
     public ResponseEntity<?> loanBook(@RequestBody LoanDto.Post post) {
         //회원 -> 도서관에 등록된 책(LibraryBook) 대여
         Member member = memberService.findById(post.getMemberId());
+        memberService.validMemberStatus(member);
         //Todo: 사용자가 대여가능한 상태인지 확인
         // 대여 조건1 : 대여 중인책이 5권 이하 -> O
         // 대여 조건2 : 연체되어서 패널티 안받고 있는지 -> O
         // 대여 조건3 : 같은 도서는 최대 2권까지
-        memberService.validLoanQuantity(member);
-        memberService.validLoanOverDue(member);
+        memberService.validLoanStatus(member);
 
         LibraryInventory libraryInventory = libraryInventoryService.findById(post.getLibraryInventoryId());
         //Todo: 도서관에 등록된 책이 대여가능 상태인지 확인 코드 필요 (재고수량 확인) -> O
