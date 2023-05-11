@@ -12,6 +12,7 @@ public enum ExceptionCode {
     MEMBER_HAS_PENALTY(403,"회원님은 도서 연체로 인해 대여가 불가능 합니다."),
     EXCEEDS_MAXIMUM_QUANTITY(403,"책을 빌릴 수 없습니다. 대여는 최대 5권까지 가능합니다."),
     MEMBER_NOT_MATCH(403,"해당 책을 대여하지 않은 회원 입니다."),
+    LOAN_QUANTITY_LIMIT(403,"동일한 책은 2권 이상 대여 불가능 합니다."),
     ALREADY_RETURNED_BOOKS(403,"이미 반납된 책 입니다.");
 
     @Getter

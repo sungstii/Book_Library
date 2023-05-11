@@ -11,6 +11,7 @@ import server.book_library.domain.loan.entity.Loan;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -65,6 +66,22 @@ public class LoanService {
     public void validMemberMatch(Loan loan, long memberId) {
         if(loan.getMember().getId() !=  memberId) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+        }
+    }
+
+    public void validDuplicationLoan(Loan loan) {
+        Member member = loan.getMember();
+        List<Loan> loanBooks = member.getLoanBooks();
+        int count = 0;
+        for(Loan loanedBook : loanBooks) {
+            if(loanedBook.getLibraryInventory().getId().equals(loan.getLibraryInventory().getId())) {
+                if(loanedBook.getLoanStats().equals(Loan.LoanStats.대여중)) {
+                    count++;
+                }
+                if(count > 1) {
+                    throw new BusinessLogicException(ExceptionCode.LOAN_QUANTITY_LIMIT);
+                }
+            }
         }
     }
 }

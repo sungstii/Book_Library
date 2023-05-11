@@ -33,6 +33,7 @@ public class LoanController {
         //Todo: 사용자가 대여가능한 상태인지 확인
         // 대여 조건1 : 대여 중인책이 5권 이하 -> O
         // 대여 조건2 : 연체되어서 패널티 안받고 있는지 -> O
+        // 대여 조건3 : 같은 도서는 최대 2권까지
         memberService.validLoanQuantity(member);
         memberService.validLoanOverDue(member);
 
@@ -44,6 +45,9 @@ public class LoanController {
         loan.setLoanedAt(LocalDateTime.now()); //대여한시간
         loan.setMember(member);
         loan.setLibraryInventory(libraryInventory);
+
+        loanService.validDuplicationLoan(loan);
+
         //Todo: 대여후 도서관에 등록된 책 재고수량 수정 -> O
         libraryInventoryService.plusLoanQuantity(libraryInventory);
 
