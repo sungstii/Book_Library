@@ -8,5 +8,5 @@ import server.book_library.domain.book.entity.Book;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-    Page<Book> findByDeleted(Pageable pageable);
+    Page<Book> findByIsDeletedFalse(Pageable pageable);
 }

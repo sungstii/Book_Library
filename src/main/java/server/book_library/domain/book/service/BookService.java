@@ -3,7 +3,6 @@ package server.book_library.domain.book.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import server.book_library.domain.book.entity.Book;
 import server.book_library.domain.book.repository.BookRepository;
@@ -22,7 +21,7 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Book patchBook(Book book) {
+    public Book updateBook(Book book) {
         Book findBook = findById(book.getId());
         Optional.ofNullable(book.getName()).ifPresent(findBook::setName);
         Optional.ofNullable(book.getWriter()).ifPresent(findBook::setWriter);
@@ -32,7 +31,7 @@ public class BookService {
     }
 
     public Page<Book> findAllBooks(int page, int size) {
-        return bookRepository.findByDeleted(PageRequest.of(page, size));
+        return bookRepository.findByIsDeletedFalse(PageRequest.of(page, size));
     }
 
     public Book deleteBook(Book book){

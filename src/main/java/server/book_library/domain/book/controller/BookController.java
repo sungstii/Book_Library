@@ -22,20 +22,20 @@ public class BookController {
     private final BookMapper bookMapper;
 
     @PostMapping
-    public ResponseEntity<?> createBook(@RequestBody BookDto.Post post) {
-        Book getBook = bookMapper.bookPostToBook(post);
-        Book createdBook = bookService.createBook(getBook);
+    public ResponseEntity<?> addBook(@RequestBody BookDto.Post post) {
+        Book Book = bookMapper.bookPostToBook(post);
+        Book createdBook = bookService.createBook(Book);
         BookDto.Response response = bookMapper.bookToBookResponse(createdBook);
 
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{book-id}")
-    public ResponseEntity<?> updateBook(@PathVariable("book-id") long bookId,
+    public ResponseEntity<?> modifyBook(@PathVariable("book-id") long bookId,
                                         @RequestBody BookDto.Patch patch) {
-        Book getBook = bookMapper.bookPatchToBook(patch);
-        getBook.setId(bookId);
-        Book updatedBook = bookService.patchBook(getBook);
+        Book Book = bookMapper.bookPatchToBook(patch);
+        Book.setId(bookId);
+        Book updatedBook = bookService.updateBook(Book);
         BookDto.Response response = bookMapper.bookToBookResponse(updatedBook);
 
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.OK);
@@ -43,8 +43,8 @@ public class BookController {
 
     @GetMapping("/{book-id}")
     public ResponseEntity<?> getBook(@PathVariable("book-id") long bookId){
-        Book getBook = bookService.findById(bookId);
-        BookDto.Response response = bookMapper.bookToBookResponse(getBook);
+        Book Book = bookService.findById(bookId);
+        BookDto.Response response = bookMapper.bookToBookResponse(Book);
 
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.OK);
     }
@@ -53,17 +53,17 @@ public class BookController {
     public ResponseEntity<?> getBooks(@RequestParam int page,
                                       @RequestParam int size) {
 
-        Page<Book> getBook = bookService.findAllBooks(page - 1, size);
-        List<Book> books = getBook.getContent();
+        Page<Book> book = bookService.findAllBooks(page - 1, size);
+        List<Book> books = book.getContent();
         List<BookDto.Response> responses = bookMapper.booksToBookResponse(books);
 
-        return new ResponseEntity<>(new MultiResponse<>(responses, getBook), HttpStatus.OK);
+        return new ResponseEntity<>(new MultiResponse<>(responses, book), HttpStatus.OK);
     }
 
     @DeleteMapping("/{book-id}")
-    public ResponseEntity<?> deleteBook(@PathVariable("book-id") long bookId) {
-        Book getBook = bookService.findById(bookId);
-        Book deleteBook = bookService.deleteBook(getBook);
+    public ResponseEntity<?> removeBook(@PathVariable("book-id") long bookId) {
+        Book Book = bookService.findById(bookId);
+        Book deleteBook = bookService.deleteBook(Book);
         BookDto.Response response = bookMapper.bookToBookResponse(deleteBook);
 
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.OK);

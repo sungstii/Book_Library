@@ -15,7 +15,7 @@ import java.util.List;
 @Getter @Setter
 public class Library extends BaseEntity {
     private String name;
-
+    private boolean isDeleted = false;
     private String location;
 
     @OneToMany(mappedBy = "library", cascade = CascadeType.REMOVE)
