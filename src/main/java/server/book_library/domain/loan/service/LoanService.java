@@ -22,6 +22,9 @@ public class LoanService {
     @Value("${max_loan_day}")
     private long maxLoanDay;
 
+    @Value("${loan_limited}")
+    private long loanLimit;
+
     public Loan loanBook(Loan loan) {
         return loanRepository.save(loan);
     }

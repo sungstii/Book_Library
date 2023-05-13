@@ -9,7 +9,13 @@ public class BookDto {
     public static class Post{
         private String name;
         private String writer;
-        private String img_url;
+        private String publisher;
+    }
+    @Getter
+    @AllArgsConstructor
+    public static class Patch{
+        private String name;
+        private String writer;
         private String publisher;
     }
     @Getter
@@ -18,7 +24,6 @@ public class BookDto {
         private long id;
         private String name;
         private String writer;
-        private String img_url;
         private String publisher;
     }
 }
