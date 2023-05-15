@@ -18,6 +18,25 @@ public class LibraryInventoryService {
         return libraryInventoryRepository.save(libraryInventory);
     }
 
+    public LibraryInventory updateLibraryInventory(LibraryInventory libraryInventory) {
+        LibraryInventory findLibraryInventory = findById(libraryInventory.getId());
+        int loanQuantity = findLibraryInventory.getLoanQuantity();
+        int totalQuantity = findLibraryInventory.getTotalQuantity();
+
+        if(loanQuantity > totalQuantity) {
+            throw new BusinessLogicException(ExceptionCode.QUANTITY_UPDATE_IMPOSSIBLE);
+        }
+        else {
+            Optional.of(libraryInventory.getTotalQuantity()).ifPresent(findLibraryInventory::setTotalQuantity);
+            return libraryInventoryRepository.save(findLibraryInventory);
+        }
+    }
+
+    public LibraryInventory deleteLibraryInventory(LibraryInventory libraryInventory) {
+        libraryInventory.setDeleted(true);
+        return libraryInventoryRepository.save(libraryInventory);
+    }
+
     public void plusLoanQuantity(LibraryInventory libraryInventory){
         libraryInventory.setLoanQuantity(libraryInventory.getLoanQuantity() + 1);
         setLoanStatus(libraryInventory);
@@ -39,7 +58,12 @@ public class LibraryInventoryService {
 
     public LibraryInventory findById(long id) {
         Optional<LibraryInventory> optionalLibraryInventory = libraryInventoryRepository.findById(id);
-        return optionalLibraryInventory.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_OUT_OF_STOCK));
+        LibraryInventory libraryInventory = optionalLibraryInventory.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_OUT_OF_STOCK));
+
+        if(libraryInventory.isDeleted()) {
+            throw new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_IS_DELETED);
+        }
+        else return libraryInventory;
     }
 
     public void validLoanStatus(LibraryInventory libraryInventory) {

@@ -2,6 +2,10 @@ package server.book_library.domain.book.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import server.book_library.domain.library.inventory.dto.LibraryInventoryDto;
+
+import java.util.List;
 
 public class BookDto {
     @Getter
@@ -25,5 +29,16 @@ public class BookDto {
         private String name;
         private String writer;
         private String publisher;
+    }
+
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    public static class DetailResponse {
+        private long id;
+        private String name;
+        private String writer;
+        private String publisher;
+        private List<LibraryInventoryDto.BookResponse> libraryInventories;
     }
 }
