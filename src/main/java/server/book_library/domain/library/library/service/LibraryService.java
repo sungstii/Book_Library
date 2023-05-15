@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import server.book_library.domain.library.inventory.entity.LibraryInventory;
 import server.book_library.domain.library.library.entity.Library;
 import server.book_library.domain.library.library.repository.LibraryRepository;
 import server.book_library.global.exception.BusinessLogicException;
 import server.book_library.global.exception.ExceptionCode;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,6 +37,10 @@ public class LibraryService {
 
     public Library deleteLibrary(Library library){
         library.setDeleted(true);
+        List<LibraryInventory> libraryInventories = library.getLibraryInventories();
+        for(LibraryInventory libraryInventory : libraryInventories) {
+            libraryInventory.setDeleted(true);
+        }
         return libraryRepository.save(library);
     }
 

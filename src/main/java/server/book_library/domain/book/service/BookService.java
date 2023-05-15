@@ -6,10 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import server.book_library.domain.book.entity.Book;
 import server.book_library.domain.book.repository.BookRepository;
+import server.book_library.domain.library.inventory.entity.LibraryInventory;
 import server.book_library.global.exception.BusinessLogicException;
 import server.book_library.global.exception.ExceptionCode;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,18 +37,36 @@ public class BookService {
         return bookRepository.findByIsDeletedFalse(PageRequest.of(page, size));
     }
 
-    public Book deleteBook(Book book){
+    public Book deleteBook(Book book) {
         book.setDeleted(true);
         return bookRepository.save(book);
     }
 
     public Book findById(long id) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-        Book book = optionalBook.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));
+        Book book = findBookById(id);
+        validateBookNotDeleted(book);
+        deletedFilterLibraryInventories(book);
 
-        if(book.isDeleted()) {
+        return book;
+    }
+
+    private Book findBookById(long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));
+    }
+
+    private void validateBookNotDeleted(Book book) {
+        if (book.isDeleted()) {
             throw new BusinessLogicException(ExceptionCode.BOOK_IS_DELETED);
         }
-        else return book;
+    }
+
+    private void deletedFilterLibraryInventories(Book book) {
+        List<LibraryInventory> filteredLibraryInventories = book.getLibraryInventories()
+                .stream()
+                .filter(libraryInventory -> !libraryInventory.isDeleted())
+                .collect(Collectors.toList());
+
+        book.setLibraryInventories(filteredLibraryInventories);
     }
 }

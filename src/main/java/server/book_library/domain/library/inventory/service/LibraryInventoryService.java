@@ -7,6 +7,7 @@ import server.book_library.global.exception.ExceptionCode;
 import server.book_library.domain.library.inventory.entity.LibraryInventory;
 import server.book_library.domain.library.inventory.repository.LibraryInventoryRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +16,18 @@ public class LibraryInventoryService {
     private final LibraryInventoryRepository libraryInventoryRepository;
 
     public LibraryInventory registrationInLibrary(LibraryInventory libraryInventory) {
+        List<LibraryInventory> libraryInventories = findAll();
+        boolean isDuplicate = libraryInventories.stream()
+                .anyMatch(libraryInventory1 ->
+                        libraryInventory1.getBook().getId().equals(libraryInventory.getBook().getId()) &&
+                                libraryInventory1.getLibrary().getId().equals(libraryInventory.getLibrary().getId()) &&
+                                !libraryInventory1.isDeleted()
+                );
+
+        if (isDuplicate) {
+            throw new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_ALREADY_EXISTS);
+        }
+
         return libraryInventoryRepository.save(libraryInventory);
     }
 
@@ -28,8 +41,15 @@ public class LibraryInventoryService {
         }
         else {
             Optional.of(libraryInventory.getTotalQuantity()).ifPresent(findLibraryInventory::setTotalQuantity);
+            if( loanQuantity == totalQuantity) {
+                findLibraryInventory.setLoanStatus(LibraryInventory.LoanStatus.모두대여중);
+            }
             return libraryInventoryRepository.save(findLibraryInventory);
         }
+    }
+
+    public List<LibraryInventory> findAll() {
+        return libraryInventoryRepository.findAll();
     }
 
     public LibraryInventory deleteLibraryInventory(LibraryInventory libraryInventory) {
