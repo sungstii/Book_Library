@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Getter @Setter
 public class LibraryInventory extends BaseEntity {
     private int totalQuantity;
+    private boolean isDeleted = false;
 
     @ColumnDefault(value = "0")
     private int loanQuantity;

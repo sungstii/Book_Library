@@ -3,10 +3,7 @@ package server.book_library.domain.library.inventory.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.book_library.domain.book.entity.Book;
 import server.book_library.domain.book.service.BookService;
 import server.book_library.domain.library.inventory.dto.LibraryInventoryDto;
@@ -16,6 +13,8 @@ import server.book_library.domain.library.inventory.service.LibraryInventoryServ
 import server.book_library.domain.library.library.entity.Library;
 import server.book_library.domain.library.library.service.LibraryService;
 import server.book_library.global.dto.SingleResponse;
+
+import javax.transaction.Transactional;
 
 @RestController
 @RequestMapping("/library/inventory")
@@ -36,6 +35,27 @@ public class LibraryInventoryController {
         LibraryInventory registration = libraryInventoryService.registrationInLibrary(libraryInventory);
 
         LibraryInventoryDto.Response response = libraryInventoryMapper.LibraryInventoryToLibraryInventoryResponse(registration);
+        return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.CREATED);
+    }
+
+    @Transactional
+    @PatchMapping("/{library-inventory-id}")
+    public ResponseEntity<?> modifyLibraryInventory(@PathVariable("library-inventory-id") long libraryInventoryId,
+                                                    @RequestBody LibraryInventoryDto.Patch patch) {
+        LibraryInventory libraryInventory = libraryInventoryMapper.LibraryInventoryPatchToLibraryInventory(patch);
+        libraryInventory.setId(libraryInventoryId);
+        LibraryInventory updatelibraryInventory = libraryInventoryService.updateLibraryInventory(libraryInventory);
+        LibraryInventoryDto.Response response = libraryInventoryMapper.LibraryInventoryToLibraryInventoryResponse(updatelibraryInventory);
+
+        return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{library-inventory-id}")
+    public ResponseEntity<?> removeLibraryInventory(@PathVariable("library-inventory-id") long libraryInventoryId) {
+        LibraryInventory libraryInventory = libraryInventoryService.findById(libraryInventoryId);
+        LibraryInventory deleteLibraryInventory = libraryInventoryService.deleteLibraryInventory(libraryInventory);
+        LibraryInventoryDto.Response response = libraryInventoryMapper.LibraryInventoryToLibraryInventoryResponse(deleteLibraryInventory);
+
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.OK);
     }
 }

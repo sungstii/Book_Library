@@ -16,6 +16,12 @@ public class LibraryInventoryDto {
         private long libraryId;
         private int totalQuantity;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class Patch{
+        private int totalQuantity;
+    }
     @Getter
     @AllArgsConstructor
     public static class Response{
@@ -32,6 +38,16 @@ public class LibraryInventoryDto {
     public static class LibraryResponse {
         private long id;
         private BookDto.Response book;
+        private int totalQuantity;
+        private int loanQuantity;
+        private LibraryInventory.LoanStatus loanStatus;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    public static class BookResponse {
+        private long id;
+        private LibraryDto.Response library;
         private int totalQuantity;
         private int loanQuantity;
         private LibraryInventory.LoanStatus loanStatus;

@@ -12,5 +12,6 @@ public interface BookMapper {
     Book bookPostToBook(BookDto.Post post);
     Book bookPatchToBook(BookDto.Patch patch);
     BookDto.Response bookToBookResponse(Book book);
+    BookDto.DetailResponse bookToBookDetailResponse(Book book);
     List<BookDto.Response> booksToBookResponse(List<Book> books);
 }
