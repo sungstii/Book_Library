@@ -69,6 +69,12 @@ public class MemberService {
     }
 
     public Member deletedMember(Member member) {
+        boolean hasActiveLoan = member.getLoanBooks().stream()
+                .anyMatch(loan -> loan.getLoanStats().equals(Loan.LoanStats.대여중));
+
+        if (hasActiveLoan) {
+            throw new BusinessLogicException(ExceptionCode.UNABLE_MEMBER_ACCOUNT_WITHDRAWAL);
+        }
         member.setMemberStatus(Member.MemberStatus.DELETE);
         return memberRepository.save(member);
     }

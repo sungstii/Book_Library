@@ -10,6 +10,8 @@ import server.book_library.domain.member.mapper.MemberMapper;
 import server.book_library.domain.member.service.MemberService;
 import server.book_library.global.dto.SingleResponse;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor

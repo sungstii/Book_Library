@@ -17,7 +17,7 @@ import server.book_library.global.dto.SingleResponse;
 import javax.transaction.Transactional;
 
 @RestController
-@RequestMapping("/library/inventory")
+@RequestMapping("/libraries/inventories")
 @RequiredArgsConstructor
 public class LibraryInventoryController {
     private final LibraryInventoryMapper libraryInventoryMapper;
