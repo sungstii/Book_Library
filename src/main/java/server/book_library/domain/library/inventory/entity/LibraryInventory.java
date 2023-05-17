@@ -1,14 +1,17 @@
 package server.book_library.domain.library.inventory.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import server.book_library.domain.book.entity.Book;
 import server.book_library.domain.library.library.entity.Library;
+import server.book_library.domain.loan.entity.Loan;
 import server.book_library.util.BaseEntity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -31,6 +34,10 @@ public class LibraryInventory extends BaseEntity {
     @JoinColumn(name = "library_id")
     @JsonBackReference
     private Library library;
+
+    @OneToMany(mappedBy = "libraryInventory", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<Loan> loans;
 
     public enum LoanStatus{
         대여가능, 모두대여중

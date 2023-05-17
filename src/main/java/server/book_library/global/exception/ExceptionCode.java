@@ -19,7 +19,8 @@ public enum ExceptionCode {
     LOAN_QUANTITY_LIMIT(403,"동일한 책은 2권 이상 대여 불가능 합니다."),
     ALREADY_RETURNED_BOOKS(403,"이미 반납된 책 입니다."),
     QUANTITY_UPDATE_IMPOSSIBLE(403,"대여중인 책이 변경 수량보다 많습니다"),
-    LIBRARY_INVENTORY_ALREADY_EXISTS(403,"도서관에 이미 등록된 책입니다.");
+    LIBRARY_INVENTORY_ALREADY_EXISTS(403,"도서관에 이미 등록된 책입니다."),
+    UNABLE_MEMBER_ACCOUNT_WITHDRAWAL(403,"대여중인 책이 있어서 탈퇴가 불가능 합니다.");
 
     @Getter
     private final int status;

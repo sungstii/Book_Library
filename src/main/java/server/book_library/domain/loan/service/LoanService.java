@@ -34,10 +34,21 @@ public class LoanService {
         return loanRepository.save(loan);
     }
 
+    public List<Loan> findByLibraryInventoryId(long libraryInventoryId) {
+        return loanRepository.findByLibraryInventoryId(libraryInventoryId);
+    }
+
     public Loan findById(long id) {
         Optional<Loan> optionalLoan = loanRepository.findById(id);
 
         return optionalLoan.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LOAN_NOT_FOUND));
+    }
+
+    public void repayment(List<Loan> loans){
+        for(Loan loan : loans) {
+            loan.setReturnedAt(LocalDateTime.now());
+            loan.setLoanStats(Loan.LoanStats.반납완료);
+        }
     }
 
     public void validReturn(Loan loan) {

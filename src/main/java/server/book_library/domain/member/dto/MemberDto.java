@@ -16,6 +16,15 @@ public class MemberDto {
 
     @Getter
     @AllArgsConstructor
+    public static class Patch{
+        private String name;
+        private String email;
+        private String password;
+        private String phone;
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class Response {
         private long id;
         private String name;
