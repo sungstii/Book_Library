@@ -12,6 +12,7 @@ public enum ExceptionCode {
     BOOK_IS_DELETED(404,"삭제된 책입니다."),
     LIBRARY_IS_GONE(404,"이 도서관은 사라진 도서관입니다."),
     LIBRARY_INVENTORY_IS_DELETED(404,"도서관에서 삭제된 도서입니다."),
+    PASSWORD_NOT_CONFIRMED(404,"암호가 올바르지 않습니다."),
     LOAN_NOT_ALLOW(403,"도서관에 해당 책이 모두 대여중입니다."),
     MEMBER_HAS_PENALTY(403,"회원님은 도서 연체로 인해 대여가 불가능 합니다."),
     EXCEEDS_MAXIMUM_QUANTITY(403,"책을 빌릴 수 없습니다. 대여는 최대 5권까지 가능합니다."),
@@ -20,7 +21,8 @@ public enum ExceptionCode {
     ALREADY_RETURNED_BOOKS(403,"이미 반납된 책 입니다."),
     QUANTITY_UPDATE_IMPOSSIBLE(403,"대여중인 책이 변경 수량보다 많습니다"),
     LIBRARY_INVENTORY_ALREADY_EXISTS(403,"도서관에 이미 등록된 책입니다."),
-    UNABLE_MEMBER_ACCOUNT_WITHDRAWAL(403,"대여중인 책이 있어서 탈퇴가 불가능 합니다.");
+    UNABLE_MEMBER_ACCOUNT_WITHDRAWAL(403,"대여중인 책이 있어서 탈퇴가 불가능 합니다."),
+    NOT_LOGIN(402, "로그인 할수 업습니다. 다시 한번 확인해주세요");
 
     @Getter
     private final int status;

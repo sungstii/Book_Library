@@ -13,6 +13,21 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 100
+
+jwt:
+  secret-key: ENC(RqlAtOgw9DoZOb8KCv6CqfDVk8va8VZYUl7c35DpVh0fd62J7nmHWA==)
+  access-token-expiration-minutes: 60
+  refresh-token-expiration-minutes: 420
+
+mail:
+  address:
+    admin: admin@gmail.com
+
 max_loan_day: 14
 max_loan_quantity: 5
 loan_limited: 2
+
+jasypt:
+  encryptor:
+    password: ${encoding_password}

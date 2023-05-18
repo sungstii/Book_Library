@@ -21,6 +21,18 @@ public class MemberService {
     private long maxLoanQuantity;
 
     public Member createMember(Member member) {
+
+        return memberRepository.save(member);
+    }
+
+    public Member deletedMember(Member member) {
+        boolean hasActiveLoan = member.getLoanBooks().stream()
+                .anyMatch(loan -> loan.getLoanStats().equals(Loan.LoanStats.대여중));
+
+        if (hasActiveLoan) {
+            throw new BusinessLogicException(ExceptionCode.UNABLE_MEMBER_ACCOUNT_WITHDRAWAL);
+        }
+        member.setMemberStatus(Member.MemberStatus.DELETE);
         return memberRepository.save(member);
     }
 
@@ -28,6 +40,12 @@ public class MemberService {
         Optional<Member> optionalMember = memberRepository.findById(id);
         return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
+
+    public Member findVerifiedEmail(String email) {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        return findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
 
     public void validLoanQuantity(Member member) {
         //Todo: 사용자가 대여가능한 상태인지 확인
@@ -66,16 +84,5 @@ public class MemberService {
         if(member.getMemberStatus().equals(Member.MemberStatus.DELETE)) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_DELETED);
         }
-    }
-
-    public Member deletedMember(Member member) {
-        boolean hasActiveLoan = member.getLoanBooks().stream()
-                .anyMatch(loan -> loan.getLoanStats().equals(Loan.LoanStats.대여중));
-
-        if (hasActiveLoan) {
-            throw new BusinessLogicException(ExceptionCode.UNABLE_MEMBER_ACCOUNT_WITHDRAWAL);
-        }
-        member.setMemberStatus(Member.MemberStatus.DELETE);
-        return memberRepository.save(member);
     }
 }
