@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/book_library?serverTimezone=Asia/Seoul
-    username: root
-    password: 12345678
+    url: ENC(SxetzCE1mdqrZAIqgbQb6fLr4Ut0ArP9qe1Imae1DvGsZQfJ5W4QY7MgE58wTgfF4WRPKWQox3J6UYCMo54tTJnVQcdVMGLhOCm5Ckoc/RU=)
+    username: ENC(waigO2x+FI07NHMEmyfQ3w==)
+    password: ENC(B4pEKuqnz7tW3mgIqDR5Tmj/1W1eeVoA)
   jpa:
     hibernate:
       ddl-auto: create
@@ -13,6 +13,21 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 100
+
+jwt:
+  secret-key: ENC(X0XkZrKEdEMjdPbe/9F3vdWtaeVelnDSlAXCKLzRPw/7l56nwudXk6CFPUXinvY0)
+  access-token-expiration-minutes: 60
+  refresh-token-expiration-minutes: 420
+
+mail:
+  address:
+    admin: admin@gmail.com
+
 max_loan_day: 14
 max_loan_quantity: 5
 loan_limited: 2
+
+jasypt:
+  encryptor:
+    password: ${encoding_password}

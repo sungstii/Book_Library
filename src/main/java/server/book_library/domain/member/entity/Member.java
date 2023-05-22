@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
 public class Member extends BaseEntity {
     private String name;
+    @Column(unique = true)
     private String email;
     private String password;
     private String phone;
@@ -29,6 +29,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Loan> loanBooks = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     public enum MemberStatus {
         ACTIVE,DELETE

@@ -1,26 +1,49 @@
 package server.book_library.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.book_library.domain.loan.entity.Loan;
 import server.book_library.domain.member.entity.Member;
 import server.book_library.domain.member.repository.MemberRepository;
 import server.book_library.global.exception.BusinessLogicException;
 import server.book_library.global.exception.ExceptionCode;
+import server.book_library.config.security.auths.utils.CustomAuthorityUtils;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
 
     @Value("${max_loan_quantity}")
     private long maxLoanQuantity;
 
     public Member createMember(Member member) {
+        String encodedPassword = passwordEncoder.encode(member.getPassword());
+        log.info("Encrypted password: {}", encodedPassword);
+        member.setPassword(encodedPassword);
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
+        return memberRepository.save(member);
+    }
+
+    public Member deletedMember(Member member) {
+        boolean hasActiveLoan = member.getLoanBooks().stream()
+                .anyMatch(loan -> loan.getLoanStats().equals(Loan.LoanStats.대여중));
+
+        if (hasActiveLoan) {
+            throw new BusinessLogicException(ExceptionCode.UNABLE_MEMBER_ACCOUNT_WITHDRAWAL);
+        }
+        member.setMemberStatus(Member.MemberStatus.DELETE);
         return memberRepository.save(member);
     }
 
@@ -28,6 +51,12 @@ public class MemberService {
         Optional<Member> optionalMember = memberRepository.findById(id);
         return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
+
+    public Member findVerifiedEmail(String email) {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        return findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
 
     public void validLoanQuantity(Member member) {
         //Todo: 사용자가 대여가능한 상태인지 확인
@@ -66,16 +95,5 @@ public class MemberService {
         if(member.getMemberStatus().equals(Member.MemberStatus.DELETE)) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_DELETED);
         }
-    }
-
-    public Member deletedMember(Member member) {
-        boolean hasActiveLoan = member.getLoanBooks().stream()
-                .anyMatch(loan -> loan.getLoanStats().equals(Loan.LoanStats.대여중));
-
-        if (hasActiveLoan) {
-            throw new BusinessLogicException(ExceptionCode.UNABLE_MEMBER_ACCOUNT_WITHDRAWAL);
-        }
-        member.setMemberStatus(Member.MemberStatus.DELETE);
-        return memberRepository.save(member);
     }
 }

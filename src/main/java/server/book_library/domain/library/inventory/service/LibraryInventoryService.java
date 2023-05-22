@@ -16,6 +16,12 @@ public class LibraryInventoryService {
     private final LibraryInventoryRepository libraryInventoryRepository;
 
     public LibraryInventory registrationInLibrary(LibraryInventory libraryInventory) {
+        extracted(libraryInventory);
+
+        return libraryInventoryRepository.save(libraryInventory);
+    }
+
+    private void extracted(LibraryInventory libraryInventory) {
         List<LibraryInventory> libraryInventories = findAll();
         boolean isDuplicate = libraryInventories.stream()
                 .anyMatch(libraryInventory1 ->
@@ -27,8 +33,6 @@ public class LibraryInventoryService {
         if (isDuplicate) {
             throw new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_ALREADY_EXISTS);
         }
-
-        return libraryInventoryRepository.save(libraryInventory);
     }
 
     public LibraryInventory updateLibraryInventory(LibraryInventory libraryInventory) {
