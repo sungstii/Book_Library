@@ -1,4 +1,4 @@
-package server.book_library.security.auths.jwt;
+package server.book_library.config.security.auths.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -17,7 +17,6 @@ import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
 
 
 @Component
@@ -97,5 +96,9 @@ public class JwtTokenizer {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         }
         else return true;
+    }
+
+    public void printEncryptorPassword() {
+        System.out.println("Encryptor Password: " + secretKey);
     }
 }

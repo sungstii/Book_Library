@@ -1,4 +1,4 @@
-package server.book_library.security.config;
+package server.book_library.config.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.filter.CorsFilter;

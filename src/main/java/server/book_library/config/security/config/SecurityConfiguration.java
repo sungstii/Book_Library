@@ -1,10 +1,10 @@
-package server.book_library.security.config;
+package server.book_library.config.security.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -13,27 +13,23 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.CorsFilter;
-import server.book_library.security.auths.filter.JwtAuthenticationFilter;
-import server.book_library.security.auths.filter.JwtVerificationFilter;
-import server.book_library.security.auths.handler.MemberAuthenticationFailureHandler;
-import server.book_library.security.auths.handler.MemberAuthenticationSuccessHandler;
-import server.book_library.security.auths.jwt.JwtTokenizer;
-import server.book_library.security.auths.utils.CustomAuthorityUtils;
+import server.book_library.config.security.auths.filter.JwtAuthenticationFilter;
+import server.book_library.config.security.auths.filter.JwtVerificationFilter;
+import server.book_library.config.security.auths.handler.MemberAuthenticationFailureHandler;
+import server.book_library.config.security.auths.handler.MemberAuthenticationSuccessHandler;
+import server.book_library.config.security.auths.jwt.JwtTokenizer;
+import server.book_library.config.security.auths.utils.CustomAuthorityUtils;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
-    private final JwtTokenizer jwtTokenizer;
-    private final CustomAuthorityUtils customAuthorityUtils;
-    private final CorsFilter corsFilter;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils customAuthorityUtils, CorsFilter corsFilter) {
-        this.jwtTokenizer = jwtTokenizer;
-        this.customAuthorityUtils = customAuthorityUtils;
-        this.corsFilter = corsFilter;
-    }
+    private final JwtTokenizer jwtTokenizer;
+    private final CustomAuthorityUtils authorityUtils;
+    private final CorsFilter corsFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -67,7 +63,7 @@ public class SecurityConfiguration {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity>{
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
@@ -77,12 +73,12 @@ public class SecurityConfiguration {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, customAuthorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
 
             builder
                     .addFilter(corsFilter)
                     .addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtVerificationFilter.class);
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
 }

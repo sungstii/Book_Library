@@ -1,4 +1,4 @@
-package server.book_library.security.auths.dto;
+package server.book_library.config.security.auths.dto;
 
 import lombok.Getter;
 
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 public class AuthDto {
 
     @Getter
-    public static class Login {
+    public class Login {
         @Email
         @NotBlank(message = "이메일을 확인해주세요")
         private String email;

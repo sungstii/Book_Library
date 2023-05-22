@@ -1,4 +1,4 @@
-package server.book_library.security.auths.handler;
+package server.book_library.config.security.auths.handler;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;

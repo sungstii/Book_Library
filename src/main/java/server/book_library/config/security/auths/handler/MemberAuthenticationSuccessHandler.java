@@ -1,4 +1,4 @@
-package server.book_library.security.auths.handler;
+package server.book_library.config.security.auths.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

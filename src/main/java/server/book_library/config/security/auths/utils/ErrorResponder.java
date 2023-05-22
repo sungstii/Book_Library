@@ -1,4 +1,4 @@
-package server.book_library.security.auths.utils;
+package server.book_library.config.security.auths.utils;
 
 import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;

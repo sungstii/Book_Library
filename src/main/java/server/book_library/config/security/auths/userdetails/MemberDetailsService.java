@@ -1,4 +1,4 @@
-package server.book_library.security.auths.userdetails;
+package server.book_library.config.security.auths.userdetails;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,9 +9,8 @@ import server.book_library.domain.member.entity.Member;
 import server.book_library.domain.member.repository.MemberRepository;
 import server.book_library.global.exception.BusinessLogicException;
 import server.book_library.global.exception.ExceptionCode;
-import server.book_library.security.auths.utils.CustomAuthorityUtils;
+import server.book_library.config.security.auths.utils.CustomAuthorityUtils;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -37,15 +36,16 @@ public class MemberDetailsService implements UserDetailsService {
     private final class MemberDetails extends Member implements UserDetails {
         MemberDetails(Member member) {
             setId(member.getId());
+            setName(member.getName());
             setEmail(member.getEmail());
             setPassword(member.getPassword());
+            setPhone(member.getPhone());
             setRoles(member.getRoles());
-            setName(member.getName());
         }
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities(){
-            return authorityUtils.createAuthorities(getRoles());
+            return authorityUtils.createdAuthorities(this.getRoles());
         }
 
         @Override

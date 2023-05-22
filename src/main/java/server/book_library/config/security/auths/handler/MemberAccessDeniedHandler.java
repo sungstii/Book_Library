@@ -1,11 +1,11 @@
-package server.book_library.security.auths.handler;
+package server.book_library.config.security.auths.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
-import server.book_library.security.auths.utils.ErrorResponder;
+import server.book_library.config.security.auths.utils.ErrorResponder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
