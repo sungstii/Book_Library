@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import server.book_library.domain.member.entity.Member;
 import server.book_library.domain.member.repository.MemberRepository;
-import server.book_library.domain.member.service.MemberService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

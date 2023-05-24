@@ -27,7 +27,7 @@ public class Member extends BaseEntity {
     private MemberStatus memberStatus = MemberStatus.ACTIVE;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    @JsonManagedReference
+    @JsonManagedReference(value = "member_loans")
     private List<Loan> loanBooks = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)

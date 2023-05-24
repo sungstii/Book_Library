@@ -2,6 +2,7 @@ package server.book_library.domain.loan.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import server.book_library.domain.library.inventory.dto.LibraryInventoryDto;
 import server.book_library.domain.loan.entity.Loan;
 import server.book_library.domain.member.dto.MemberDto;
@@ -17,6 +18,7 @@ public class LoanDto {
     }
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Response{
         private long id;
         private MemberDto.Response member;

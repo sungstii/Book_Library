@@ -25,12 +25,12 @@ public class Loan extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    @JsonBackReference
+    @JsonBackReference(value = "member_loans")
     private Member member;
 
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "library_inventory_id")
+    @JsonBackReference(value = "loan_libraryInventory")
     private LibraryInventory libraryInventory;
 
     public enum LoanStats {

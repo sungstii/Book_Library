@@ -43,18 +43,18 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .apply(new CustomFilterConfigurer())
-                .and()
-                .authorizeRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.GET, "/books/**").permitAll()
-                        .antMatchers( "/books/**").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.GET, "/libraries/**").permitAll()
-                        .antMatchers( "/libraries/**").hasRole("ADMIN")
-                        .antMatchers("/libraries/inventories/**").hasRole("ADMIN")
-                        .antMatchers("/loan/**").hasRole("USER")
-                        .antMatchers("/return/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/members/**").hasRole("USER")
-                        .antMatchers( "/members/**").permitAll()
-                        .anyRequest().permitAll());
+                .and();
+//                .authorizeRequests(authorize -> authorize
+//                        .antMatchers(HttpMethod.GET, "/books/**").permitAll()
+//                        .antMatchers( "/books/**").hasRole("ADMIN")
+//                        .antMatchers(HttpMethod.GET, "/libraries/**").permitAll()
+//                        .antMatchers( "/libraries/**").hasRole("ADMIN")
+//                        .antMatchers("/libraries/inventories/**").hasRole("ADMIN")
+//                        .antMatchers("/loan/**").hasRole("USER")
+//                        .antMatchers("/return/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.DELETE,"/members/**").hasRole("USER")
+//                        .antMatchers( "/members/**").permitAll()
+//                        .anyRequest().permitAll());
         return http.build();
     }
 

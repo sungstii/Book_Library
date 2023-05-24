@@ -1,6 +1,7 @@
 package server.book_library.domain.library.inventory.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,16 +28,16 @@ public class LibraryInventory extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    @JsonBackReference
+    @JsonIgnoreProperties("libraryInventories")
     private Book book;
 
     @ManyToOne
     @JoinColumn(name = "library_id")
-    @JsonBackReference
+    @JsonIgnoreProperties("libraryInventories")
     private Library library;
 
     @OneToMany(mappedBy = "libraryInventory", cascade = CascadeType.REMOVE)
-    @JsonManagedReference
+    @JsonManagedReference(value = "loan_libraryInventory")
     private List<Loan> loans;
 
     public enum LoanStatus{

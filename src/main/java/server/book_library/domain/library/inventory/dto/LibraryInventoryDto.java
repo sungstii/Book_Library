@@ -24,6 +24,7 @@ public class LibraryInventoryDto {
     }
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Response{
         private long id;
         private BookDto.Response book;
@@ -35,6 +36,7 @@ public class LibraryInventoryDto {
 
     @Getter @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class LibraryResponse {
         private long id;
         private BookDto.Response book;
@@ -45,6 +47,7 @@ public class LibraryInventoryDto {
 
     @Getter @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class BookResponse {
         private long id;
         private LibraryDto.Response library;

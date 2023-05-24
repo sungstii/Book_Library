@@ -1,6 +1,8 @@
 package server.book_library.domain.library.inventory.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import server.book_library.global.exception.BusinessLogicException;
 import server.book_library.global.exception.ExceptionCode;
@@ -15,6 +17,8 @@ import java.util.Optional;
 public class LibraryInventoryService {
     private final LibraryInventoryRepository libraryInventoryRepository;
 
+    //캐시를 저장하는것 = 공통기능으로 묶은
+    @CachePut(value = "libraryInventory", key = "#result.id", unless = "#result == null", cacheManager = "cacheManagerTest")
     public LibraryInventory registrationInLibrary(LibraryInventory libraryInventory) {
         extracted(libraryInventory);
 
@@ -80,6 +84,7 @@ public class LibraryInventoryService {
         }
     }
 
+    @Cacheable(value = "libraryInventory", key = "#id", unless = "#result == null", cacheManager = "cacheManagerTest")
     public LibraryInventory findById(long id) {
         Optional<LibraryInventory> optionalLibraryInventory = libraryInventoryRepository.findById(id);
         LibraryInventory libraryInventory = optionalLibraryInventory.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_OUT_OF_STOCK));
