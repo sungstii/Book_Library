@@ -1,6 +1,7 @@
 package server.book_library.domain.book.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class BookService {
         return bookRepository.save(book);
     }
 
+    @Cacheable(value = "book", key = "#id", unless = "#result == null", cacheManager = "cacheManagerTest")
     public Book findById(long id) {
         Book book = findBookById(id);
         validateBookNotDeleted(book);
@@ -50,7 +52,8 @@ public class BookService {
         return book;
     }
 
-    private Book findBookById(long id) {
+    @Cacheable(value = "book", key = "#id", unless = "#result == null", cacheManager = "cacheManagerTest")
+    public Book findBookById(long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));
     }

@@ -2,6 +2,8 @@ package server.book_library.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import server.book_library.domain.member.entity.Member;
 
 import javax.validation.constraints.Email;
@@ -28,16 +30,9 @@ public class MemberDto {
         private String phone;
     }
 
-//    @Getter
-//    @AllArgsConstructor
-//    public static class Patch{
-//        private String name;
-//        private String email;
-//        private String password;
-//        private String phone;
-//    }
 
     @Getter
+    @Setter
     @AllArgsConstructor
     public static class Response {
         private long id;

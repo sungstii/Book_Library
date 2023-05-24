@@ -2,6 +2,16 @@ server:
   port: 8080
 
 spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  cache:
+    type: redis
+    redis:
+      cache-null-values: true
+  redis:
+    host: ENC(0me8e7OGnqW3EquGC7MYC82MSRctP65T)
+    port: 6379
   datasource:
     url: ENC(SxetzCE1mdqrZAIqgbQb6fLr4Ut0ArP9qe1Imae1DvGsZQfJ5W4QY7MgE58wTgfF4WRPKWQox3J6UYCMo54tTJnVQcdVMGLhOCm5Ckoc/RU=)
     username: ENC(waigO2x+FI07NHMEmyfQ3w==)

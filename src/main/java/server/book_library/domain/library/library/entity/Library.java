@@ -19,6 +19,5 @@ public class Library extends BaseEntity {
     private String location;
 
     @OneToMany(mappedBy = "library", cascade = CascadeType.REMOVE)
-    @JsonManagedReference
     private List<LibraryInventory> libraryInventories;
 }
