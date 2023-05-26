@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import server.book_library.domain.book.entity.Book;
+import server.book_library.domain.loan.entity.Loan;
 import server.book_library.global.exception.BusinessLogicException;
 import server.book_library.global.exception.ExceptionCode;
 import server.book_library.domain.library.inventory.entity.LibraryInventory;
 import server.book_library.domain.library.inventory.repository.LibraryInventoryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +22,9 @@ public class LibraryInventoryService {
 
     //캐시를 저장하는것 = 공통기능으로 묶은
     @CachePut(value = "libraryInventory", key = "#result.id", unless = "#result == null", cacheManager = "cacheManagerTest")
-    public LibraryInventory registrationInLibrary(LibraryInventory libraryInventory) {
+    public LibraryInventory createLibraryInventory(LibraryInventory libraryInventory) {
         extracted(libraryInventory);
+        isDeletedBook(libraryInventory);
 
         return libraryInventoryRepository.save(libraryInventory);
     }
@@ -36,6 +40,12 @@ public class LibraryInventoryService {
 
         if (isDuplicate) {
             throw new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_ALREADY_EXISTS);
+        }
+    }
+
+    private void isDeletedBook(LibraryInventory libraryInventory){
+        if(libraryInventory.getBook().isDeleted()) {
+            throw new BusinessLogicException(ExceptionCode.BOOK_HAS_DELETE);
         }
     }
 
@@ -65,7 +75,7 @@ public class LibraryInventoryService {
         return libraryInventoryRepository.save(libraryInventory);
     }
 
-    public void plusLoanQuantity(LibraryInventory libraryInventory){
+    public void plusLoanQuantity(LibraryInventory libraryInventory) {
         libraryInventory.setLoanQuantity(libraryInventory.getLoanQuantity() + 1);
         setLoanStatus(libraryInventory);
     }
@@ -75,7 +85,7 @@ public class LibraryInventoryService {
         setLoanStatus(libraryInventory);
     }
 
-    public static void setLoanStatus(LibraryInventory libraryInventory) {
+    private static void setLoanStatus(LibraryInventory libraryInventory) {
         if(libraryInventory.getLoanQuantity() == libraryInventory.getTotalQuantity()) {
             libraryInventory.setLoanStatus(LibraryInventory.LoanStatus.모두대여중);
         }
@@ -84,11 +94,15 @@ public class LibraryInventoryService {
         }
     }
 
-    @Cacheable(value = "libraryInventory", key = "#id", unless = "#result == null", cacheManager = "cacheManagerTest")
     public LibraryInventory findById(long id) {
         Optional<LibraryInventory> optionalLibraryInventory = libraryInventoryRepository.findById(id);
         LibraryInventory libraryInventory = optionalLibraryInventory.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_OUT_OF_STOCK));
+        List<Loan> loans = new ArrayList<>(libraryInventory.getLoans());
 
+        for(Loan loan: loans) {
+            loan.setMember(loan.getMember());
+        }
+        libraryInventory.setLoans(loans);
         if(libraryInventory.isDeleted()) {
             throw new BusinessLogicException(ExceptionCode.LIBRARY_INVENTORY_IS_DELETED);
         }

@@ -12,6 +12,7 @@ import server.book_library.domain.loan.entity.Loan;
 import server.book_library.util.BaseEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,7 +39,7 @@ public class LibraryInventory extends BaseEntity {
 
     @OneToMany(mappedBy = "libraryInventory", cascade = CascadeType.REMOVE)
     @JsonManagedReference(value = "loan_libraryInventory")
-    private List<Loan> loans;
+    private List<Loan> loans = new ArrayList<>();
 
     public enum LoanStatus{
         대여가능, 모두대여중

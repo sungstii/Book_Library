@@ -1,6 +1,7 @@
 package server.book_library.domain.library.library.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.List;
 public class LibraryController {
     private final LibraryService libraryService;
     private final LibraryMapper libraryMapper;
-    
+
     @PostMapping
     public ResponseEntity<?> addLibrary(@RequestBody LibraryDto.Post post) {
         Library library = libraryMapper.libraryPostToLibrary(post);
@@ -52,7 +53,7 @@ public class LibraryController {
     @GetMapping
     public ResponseEntity<?> getsLibraries(@RequestParam int page,
                                            @RequestParam int size) {
-        Page<Library> librariesPages = libraryService.getLibraries(page, size);
+        Page<Library> librariesPages = libraryService.getLibraries(page - 1, size);
         List<Library> libraries = librariesPages.getContent();
         List<LibraryDto.Response> responses = libraryMapper.librariesToLibraryResponses(libraries);
 
