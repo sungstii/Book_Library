@@ -43,7 +43,7 @@ public class BookController {
 
     @GetMapping("/{book-id}")
     public ResponseEntity<?> getBook(@PathVariable("book-id") long bookId){
-        Book book = bookService.findById(bookId);
+        Book book = bookService.findBook(bookId);
         BookDto.DetailResponse response = bookMapper.bookToBookDetailResponse(book);
 
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.OK);

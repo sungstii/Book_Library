@@ -34,6 +34,10 @@ public class BookService {
         return bookRepository.save(findBook);
     }
 
+    public Book findBook(long bookId) {
+        return findById(bookId);
+    }
+
     public Page<Book> findAllBooks(int page, int size) {
         return bookRepository.findByIsDeletedFalse(PageRequest.of(page, size));
     }
@@ -52,7 +56,6 @@ public class BookService {
         return book;
     }
 
-    @Cacheable(value = "book", key = "#id", unless = "#result == null", cacheManager = "cacheManagerTest")
     public Book findBookById(long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));

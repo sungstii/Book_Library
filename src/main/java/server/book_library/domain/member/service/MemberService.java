@@ -27,6 +27,13 @@ public class MemberService {
     private long maxLoanQuantity;
 
     public Member createMember(Member member) {
+        String email = member.getEmail();
+
+        boolean exists = isMemberExists(email);
+        if (exists) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+        }
+
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         log.info("Encrypted password: {}", encodedPassword);
         member.setPassword(encodedPassword);
@@ -52,11 +59,11 @@ public class MemberService {
         return optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
-    public Member findVerifiedEmail(String email) {
-        Optional<Member> findMember = memberRepository.findByEmail(email);
-        return findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
+    public boolean isMemberExists(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
 
+        return member.isPresent();
+    }
 
     public void validLoanQuantity(Member member) {
         //Todo: 사용자가 대여가능한 상태인지 확인

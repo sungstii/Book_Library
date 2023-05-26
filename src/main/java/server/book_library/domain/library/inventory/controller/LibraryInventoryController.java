@@ -32,7 +32,7 @@ public class LibraryInventoryController {
 
         libraryInventory.setLibrary(library);
         libraryInventory.setBook(book);
-        LibraryInventory registration = libraryInventoryService.registrationInLibrary(libraryInventory);
+        LibraryInventory registration = libraryInventoryService.createLibraryInventory(libraryInventory);
 
         LibraryInventoryDto.Response response = libraryInventoryMapper.LibraryInventoryToLibraryInventoryResponse(registration);
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.CREATED);
@@ -44,8 +44,8 @@ public class LibraryInventoryController {
                                                     @RequestBody LibraryInventoryDto.Patch patch) {
         LibraryInventory libraryInventory = libraryInventoryMapper.LibraryInventoryPatchToLibraryInventory(patch);
         libraryInventory.setId(libraryInventoryId);
-        LibraryInventory updatelibraryInventory = libraryInventoryService.updateLibraryInventory(libraryInventory);
-        LibraryInventoryDto.Response response = libraryInventoryMapper.LibraryInventoryToLibraryInventoryResponse(updatelibraryInventory);
+        LibraryInventory updateLibraryInventory = libraryInventoryService.updateLibraryInventory(libraryInventory);
+        LibraryInventoryDto.Response response = libraryInventoryMapper.LibraryInventoryToLibraryInventoryResponse(updateLibraryInventory);
 
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.OK);
     }

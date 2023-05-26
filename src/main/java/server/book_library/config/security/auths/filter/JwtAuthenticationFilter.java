@@ -9,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import server.book_library.domain.member.entity.Member;
-import server.book_library.config.security.auths.dto.AuthDto;
+import server.book_library.config.security.auths.dto.LoginDto;
 import server.book_library.config.security.auths.jwt.JwtTokenizer;
 
 import javax.servlet.FilterChain;
@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response){
         ObjectMapper objectMapper = new ObjectMapper();
-        AuthDto.Login loginDto = objectMapper.readValue(request.getInputStream(), AuthDto.Login.class);
+        LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(),loginDto.getPassword());

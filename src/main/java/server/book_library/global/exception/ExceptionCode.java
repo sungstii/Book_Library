@@ -5,6 +5,7 @@ import lombok.Getter;
 public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "회원의 ID를 찾을 수 없습니다."),
     BOOK_NOT_FOUND(404, "책을 찾을 수 없습니다."),
+    BOOK_HAS_DELETE(404, "삭제된 책입니다."),
     LIBRARY_NOT_FOUND(404, "도서관을 찾을 수 없습니다."),
     LIBRARY_INVENTORY_OUT_OF_STOCK(404,"도서 재고가 없습니다."),
     LOAN_NOT_FOUND(404,"대여 ID를 찾을 수 없습니다"),
@@ -22,7 +23,8 @@ public enum ExceptionCode {
     QUANTITY_UPDATE_IMPOSSIBLE(403,"대여중인 책이 변경 수량보다 많습니다"),
     LIBRARY_INVENTORY_ALREADY_EXISTS(403,"도서관에 이미 등록된 책입니다."),
     UNABLE_MEMBER_ACCOUNT_WITHDRAWAL(403,"대여중인 책이 있어서 탈퇴가 불가능 합니다."),
-    NOT_LOGIN(402, "로그인 할수 업습니다. 다시 한번 확인해주세요");
+    NOT_LOGIN(402, "로그인 할수 업습니다. 다시 한번 확인해주세요"),
+    MEMBER_EXISTS(409, "이미 등록이 되어있는 회원입니다.");
 
     @Getter
     private final int status;

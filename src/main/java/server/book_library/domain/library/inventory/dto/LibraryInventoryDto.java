@@ -18,11 +18,12 @@ public class LibraryInventoryDto {
     }
 
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Patch{
         private int totalQuantity;
     }
-    @Getter
+
+    @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response{

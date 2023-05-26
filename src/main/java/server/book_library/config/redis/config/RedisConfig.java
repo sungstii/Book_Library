@@ -44,6 +44,7 @@ public class RedisConfig {
     public RedisConnectionFactory redisConnectionFactory() {
         LettuceConnectionFactory factory = new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
         factory.afterPropertiesSet();
+        factory.getConnection().flushAll();
         return factory;
     }
 
