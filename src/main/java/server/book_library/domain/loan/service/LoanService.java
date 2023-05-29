@@ -30,7 +30,6 @@ public class LoanService {
     }
 
     public Loan returnBook(Loan loan) {
-        loan.setReturnedAt(LocalDateTime.now());
         loan.setLoanStats(Loan.LoanStats.반납완료);
         return loanRepository.save(loan);
     }

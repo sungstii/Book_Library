@@ -36,5 +36,4 @@ public class Loan{
     public enum LoanStats {
         대여중, 반납완료
     }
-
 }
