@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity(name = "loan_history")
 @Getter
 @Setter
-public class Loan extends BaseEntity {
+public class Loan{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

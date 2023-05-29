@@ -1,6 +1,7 @@
 package server.book_library.domain.loan.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,13 +56,15 @@ public class LoanController {
         LoanDto.Response response = loanMapper.loanToLoanResponse(loanBook);
         //Todo: 이 요청에서 예외,오류 발생시 롤백 필요 -> O
 
+        libraryInventoryService.minusLoanQuantity(libraryInventory);
+
         return new ResponseEntity<>(new SingleResponse<>(response), HttpStatus.OK);
     }
 
     @Transactional
     @PostMapping("/return/{loan-id}")
     public ResponseEntity<?> returnBook(@RequestBody LoanDto.Post post, @PathVariable("loan-id") long loanId) {
-        Member member = memberService.findById(post.getMemberId());
+
         LibraryInventory libraryInventory = libraryInventoryService.findById(post.getLibraryInventoryId());
         Loan loan = loanService.findById(loanId);
         //Todo:
@@ -70,7 +73,6 @@ public class LoanController {
         // 조건2. 날짜 확인후 연체 여부확인 및 패널티 부여 (연체된 날짜만큼 대여 불가능) -> 정상작동 및 member 상태변경
         loanService.validReturn(loan);
         loanService.validMemberMatch(loan, post.getMemberId());
-        loan.setReturnedAt(LocalDateTime.now());
 
         if(loanService.checkLateReturn(loan)) {
             loanService.setMemberPenalty(loan);

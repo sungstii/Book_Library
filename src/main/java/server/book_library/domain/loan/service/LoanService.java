@@ -30,6 +30,7 @@ public class LoanService {
     }
 
     public Loan returnBook(Loan loan) {
+        loan.setReturnedAt(LocalDateTime.now());
         loan.setLoanStats(Loan.LoanStats.반납완료);
         return loanRepository.save(loan);
     }
@@ -44,15 +45,15 @@ public class LoanService {
         return optionalLoan.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LOAN_NOT_FOUND));
     }
 
-    public void repayment(List<Loan> loans){
-        for(Loan loan : loans) {
+    public void repayment(List<Loan> loans) {
+        for (Loan loan : loans) {
             loan.setReturnedAt(LocalDateTime.now());
             loan.setLoanStats(Loan.LoanStats.반납완료);
         }
     }
 
     public void validReturn(Loan loan) {
-        if(loan.getLoanStats().equals(Loan.LoanStats.반납완료)) {
+        if (loan.getLoanStats().equals(Loan.LoanStats.반납완료)) {
             throw new BusinessLogicException(ExceptionCode.ALREADY_RETURNED_BOOKS);
         }
     }
@@ -78,7 +79,7 @@ public class LoanService {
     }
 
     public void validMemberMatch(Loan loan, long memberId) {
-        if(loan.getMember().getId() !=  memberId) {
+        if (loan.getMember().getId() != memberId) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
         }
     }
@@ -87,12 +88,12 @@ public class LoanService {
         Member member = loan.getMember();
         List<Loan> loanBooks = member.getLoanBooks();
         int count = 0;
-        for(Loan loanedBook : loanBooks) {
-            if(loanedBook.getLibraryInventory().getId().equals(loan.getLibraryInventory().getId())) {
-                if(loanedBook.getLoanStats().equals(Loan.LoanStats.대여중)) {
+        for (Loan loanedBook : loanBooks) {
+            if (loanedBook.getLibraryInventory().getId().equals(loan.getLibraryInventory().getId())) {
+                if (loanedBook.getLoanStats().equals(Loan.LoanStats.대여중)) {
                     count++;
                 }
-                if(count > 1) {
+                if (count >= loanLimit) {
                     throw new BusinessLogicException(ExceptionCode.LOAN_QUANTITY_LIMIT);
                 }
             }
